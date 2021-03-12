@@ -17,7 +17,7 @@
         </th>
         <th>Actions</th>
       </tr>
-      <tr v-for="(item, i) in sortedList" :key="item.id">
+      <tr v-for="item in sortedList" :key="item.id">
         <td>{{ item.id }}</td>
         <td>{{ item.title }}</td>
         <td>{{ item.name }}</td>
@@ -39,15 +39,19 @@
 export default {
   el: "#table",
   data: {
+    loading: true,
     list: [],
     currentSortDir: "asc",
+    currentSort: "completed",
   },
   data() {
     return {
       list: [],
       userList: [],
+      
+
       currentSortDir: "asc",
-      currentSort: "completed",
+      currentSort: "",
 
       pageSize: 10,
       currentPage: 1,
@@ -55,7 +59,7 @@ export default {
   },
 
   created() {
-    window.addEventListener("load", (event) => {
+    setTimeout(() => {
       fetch("https://jsonplaceholder.typicode.com/todos")
         .then((response) => response.json())
         .then((response) => {
@@ -64,8 +68,12 @@ export default {
 
       fetch("https://jsonplaceholder.typicode.com/users")
         .then((response) => response.json())
-        .then((users) => (this.userList = users).then(this.bind()));
-    });
+        .then((users) => {
+          this.loading = false;
+          this.userList = users;
+          this.bind();
+        });
+    }, 850);
   },
 
   methods: {
