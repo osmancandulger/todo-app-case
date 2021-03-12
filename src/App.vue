@@ -28,10 +28,10 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-// body {
-//   display: flex;
-//   width: 100%;
-//   height: 100vh;
-//   justify-content: center;
-// }
+body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+}
 </style>

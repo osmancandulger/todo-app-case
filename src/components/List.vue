@@ -41,13 +41,14 @@ export default {
   data: {
     list: [],
     currentSortDir: "asc",
-    currentSort: "completed",
   },
   data() {
     return {
       list: [],
       userList: [],
       currentSortDir: "asc",
+      currentSort: "completed",
+
       pageSize: 10,
       currentPage: 1,
     };
