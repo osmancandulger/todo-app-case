@@ -6,6 +6,7 @@
       <div class="loader" v-if="this.loading"></div>
     </div> -->
     <List v-if="!this.loading"></List>
+    <Modal></Modal>
 
     <p>Made with ❤️ for Related Digital!</p>
   </body>
@@ -13,11 +14,13 @@
 
 <script>
 import List from "./components/List.vue";
+import Modal from "./components/Modal.vue";
 
 export default {
   name: "App",
   components: {
     List,
+    Modal,
   },
 };
 </script>

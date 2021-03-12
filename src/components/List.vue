@@ -29,7 +29,10 @@
         </td>
       </tr>
     </table>
+    
 
+
+    
     <button @click="prevPage">Prev</button>
     <button @click="nextPage">Next</button>
   </div>
@@ -38,17 +41,18 @@
 <script>
 export default {
   el: "#table",
-  data: {
-    loading: true,
-    list: [],
-    currentSortDir: "asc",
-    currentSort: "completed",
+  components: {
+    Navigator,
   },
+  
   data() {
     return {
+      loading: true,
+
       list: [],
       userList: [],
-      
+
+      currentSort: "completed",
 
       currentSortDir: "asc",
       currentSort: "",
@@ -110,6 +114,7 @@ export default {
       if (this.currentPage > 1) this.currentPage--;
     },
   },
+
   computed: {
     sortedList: function() {
       return this.list
