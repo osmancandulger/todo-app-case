@@ -3,6 +3,8 @@
     <h1>Todo App</h1>
 
     <List></List>
+
+    <p>Made with ❤️ for Related Digital!</p>
   </body>
 </template>
 
@@ -15,9 +17,6 @@ export default {
     List,
   },
 };
-
-
-
 </script>
 
 <style lang="scss">
