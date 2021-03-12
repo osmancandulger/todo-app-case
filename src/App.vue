@@ -13,12 +13,14 @@
 <script>
 import List from "./components/List.vue";
 import Modal from "./components/Modal.vue";
+import data from "./components/data.js";
 
 export default {
   name: "App",
   components: {
     List,
     Modal,
+    data,
   },
 };
 </script>

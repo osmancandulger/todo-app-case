@@ -17,7 +17,7 @@
         </th>
         <th>Actions</th>
       </tr>
-      <tr v-for="item in sortedList" :key="item.id">
+      <tr v-for="(item, index) in sortedList" :key="item.id">
         <td>{{ item.id }}</td>
         <td>{{ item.title }}</td>
         <td>{{ item.name }}</td>
@@ -31,7 +31,9 @@
           >
             Edit
           </button>
-          <button class="delete-button" @click="remove()">Delete</button>
+          <button class="delete-button" @click="removeChart(index)">
+            Delete
+          </button>
         </td>
       </tr>
     </table>
@@ -45,14 +47,17 @@
 
 <script>
 import Modal from "./Modal.vue";
+import { deleteTaskFromApi, getDataFromApi } from "./data";
+import { API_URL, USER_URL } from "./constants";
 
 export default {
   el: "#table",
   components: {
     Navigator,
     Modal,
+    getDataFromApi,
   },
-  props: ["openModal"],
+  props: ["openModal", "getDataFromApi"],
   data() {
     return {
       loading: true,
@@ -77,7 +82,6 @@ export default {
         .then((response) => {
           this.list = response;
         });
-
       fetch("https://jsonplaceholder.typicode.com/users")
         .then((response) => response.json())
         .then((users) => {
@@ -89,13 +93,35 @@ export default {
   },
 
   methods: {
-    remove: function() {
-      const $deleteButton = document.querySelectorAll(".delete-button");
-      $$deleteButton.forEach(element => {
-        element.addEventListener('click')
-        
+    fillTasksTable() {
+      getDataFromApi().then((currentTasks) => {
+        currentTasks.forEach((task, index) => {
+          this.addTaskToTable(task, index + 1);
+        });
+        this.deleteTask();
       });
     },
+    editTodo: function(todo) {
+      this.beforeEditCache = todo.title;
+      this.editedTodo = todo;
+    },
+
+    // removeTodo: function(todo) {
+    //   this.todos.splice(this.todos.indexOf(todo), 1);
+    // },
+
+    // removeTask: function(lists) {
+    //   var index = this.sortedList.findIndex(this.sortedList, lists);
+    //   this.sortedList.splice(index, 1);
+    // },
+
+    removeChart(index) {
+      this.list.splice(index, 1);
+      return fetch(`${USER_URL}/${this.list.id}`, {
+        method: "delete",
+      });
+    },
+
     bind: function() {
       for (let i = 0; i < this.list.length; i++) {
         for (let j = 0; j < this.userList.length; j++) {
