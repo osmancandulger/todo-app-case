@@ -24,31 +24,39 @@
         <td v-if="item.completed">Done</td>
         <td v-else>In Progress</td>
         <td class="table-buttons">
-          <button class="edit-button">Edit</button>
+          <button
+            class="edit-button"
+            :openModal="openModal"
+            @click="openModal = true"
+          >
+            Edit
+          </button>
           <button class="delete-button" @click="remove()">Delete</button>
         </td>
       </tr>
     </table>
-    
 
+    <Modal :sortedList="sortedList" v-if="openModal" />
 
-    
     <button @click="prevPage">Prev</button>
     <button @click="nextPage">Next</button>
   </div>
 </template>
 
 <script>
+import Modal from "./Modal.vue";
+
 export default {
   el: "#table",
   components: {
     Navigator,
+    Modal,
   },
-  
+  props: ["openModal"],
   data() {
     return {
       loading: true,
-
+      openModal: false,
       list: [],
       userList: [],
 
@@ -82,7 +90,11 @@ export default {
 
   methods: {
     remove: function() {
-      console.log("...");
+      const $deleteButton = document.querySelectorAll(".delete-button");
+      $$deleteButton.forEach(element => {
+        element.addEventListener('click')
+        
+      });
     },
     bind: function() {
       for (let i = 0; i < this.list.length; i++) {

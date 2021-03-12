@@ -5,9 +5,7 @@
     <!-- <div class="loader-container">
       <div class="loader" v-if="this.loading"></div>
     </div> -->
-    <List v-if="!this.loading"></List>
-    <Modal></Modal>
-
+    <List v-if="!this.loading" />
     <p>Made with ❤️ for Related Digital!</p>
   </body>
 </template>
