@@ -19,18 +19,31 @@
       </tr>
       <tr v-for="(item, index) in sortedList" :key="item.id">
         <td>{{ item.id }}</td>
-        <td>{{ item.title }}</td>
+        <td
+          class="title"
+          contenteditable="true"
+          v-on:keydown.enter="updateTask($event, list)"
+          @blur="updateTask($event, list)"
+        >
+          {{ item.title }}
+        </td>
         <td>{{ item.name }}</td>
-        <td v-if="item.completed">Done</td>
+        <td v-if="item.completed" :sortedList="sortedList">Done</td>
         <td v-else>In Progress</td>
         <td class="table-buttons">
-          <button
+          <!-- <button
             class="edit-button"
-            :openModal="openModal"
-            @click="openModal = true"
+            @click="
+              editChart();
+              openModal = true;
+              this.openModal = true;
+            "
           >
             Edit
-          </button>
+          </button> -->
+
+          <button @click="updateStatus()">Change Status</button>
+          <button @click="editTitle()">Edit Title</button>
           <button class="delete-button" @click="removeChart(index)">
             Delete
           </button>
@@ -64,6 +77,9 @@ export default {
       openModal: false,
       list: [],
       userList: [],
+      editTitle: this.editTitle,
+      checked: false,
+      number: 1,
 
       currentSort: "completed",
 
@@ -77,11 +93,14 @@ export default {
 
   created() {
     setTimeout(() => {
+      //Get data From Todo
       fetch("https://jsonplaceholder.typicode.com/todos")
         .then((response) => response.json())
         .then((response) => {
           this.list = response;
         });
+
+      //Get data to access to Asignee Names
       fetch("https://jsonplaceholder.typicode.com/users")
         .then((response) => response.json())
         .then((users) => {
@@ -91,16 +110,59 @@ export default {
         });
     }, 850);
   },
-
+  mounted() {},
   methods: {
-    fillTasksTable() {
-      getDataFromApi().then((currentTasks) => {
-        currentTasks.forEach((task, index) => {
-          this.addTaskToTable(task, index + 1);
+    getData() {},
+    updateStatus() {
+      //Update Status
+      fetch(`https://jsonplaceholder.typicode.com/todos/${this.list.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          completed: true,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          this.sortedList.completed = json.completed;
+          console.log(this.sortedList.completed);
         });
-        this.deleteTask();
-      });
     },
+    editTitle(index) {
+      fetch("https://jsonplaceholder.typicode.com/todos/1", {
+        method: "PATCH",
+        body: JSON.stringify({
+          title: "test1",
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => (this.sortedList.title = json.title));
+    },
+
+    // You may update task(title) when you onfocus onto related title section
+    updateTask($event, item) {
+      $event.preventDefault();
+      item.title = $event.target.innerText;
+      fetch("https://jsonplaceholder.typicode.com/todos/1", {
+        method: "PATCH",
+        body: JSON.stringify({
+          title: "test1",
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => (this.sortedList.title = json.title));
+      $event.target.blur();
+      console.log(json);
+    },
+
     editTodo: function(todo) {
       this.beforeEditCache = todo.title;
       this.editedTodo = todo;
@@ -122,6 +184,7 @@ export default {
       });
     },
 
+    // Insert Asignee names from /users endpoint to /todo endpoint's response
     bind: function() {
       for (let i = 0; i < this.list.length; i++) {
         for (let j = 0; j < this.userList.length; j++) {
@@ -132,6 +195,7 @@ export default {
       }
     },
 
+    //Sorting all list accordingto Status 1.In Progress 2.Done
     sort: function(s) {
       if (s === this.currentSort) {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
@@ -144,6 +208,7 @@ export default {
         });
     },
 
+    // Pagination feature to continue next page go back to previous page
     nextPage: function() {
       if (this.currentPage * this.pageSize < this.list.length)
         this.currentPage++;
@@ -154,6 +219,8 @@ export default {
   },
 
   computed: {
+    //Sorting all list accordingto Status 1.In Progress 2.Done and added navigator
+
     sortedList: function() {
       return this.list
         .sort((a, b) => {
@@ -184,6 +251,7 @@ th {
   text-align: left;
   border-bottom: 2px solid rgba(214, 214, 214, 0.8);
 }
+
 .status {
   display: flex;
   align-items: center;
@@ -195,6 +263,9 @@ th {
 tr td {
   text-align: left;
   padding-left: 15px;
+}
+.title {
+  border: 1px solid rgba(223, 223, 223, 0.5);
 }
 td:nth-child(1) {
   width: fit-content;

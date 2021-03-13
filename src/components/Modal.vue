@@ -1,6 +1,6 @@
 <template>
   <div id="modal" class="modal-vue">
-    <button id="myBtn" @click="openModal = true">Open Modal</button>
+    <!-- <button id="myBtn" @click="openModal = true">Open Modal</button> -->
     <!-- overlay -->
     <div class="overlay" v-if="openModal" @click="openModal = false"></div>
     <!-- modal -->
@@ -9,7 +9,8 @@
 
       <!-- <p v-for="(item, i) in sortedList" :key="item.id">{{ item.id }}</p> -->
       <label for="input">Title: </label>
-      <input type="text" class="input" v-model="sortedList[0].title" />
+      <input type="text" class="input" v-model="sortedList.title" />
+      
     </div>
   </div>
 </template>
@@ -24,7 +25,7 @@ export default {
       openModal: false,
     };
   },
-  props: ["sortedList", "openModal"],
+  props: ["sortedList", "openModal", "completed"],
   mounted() {},
   methods: {
     showModal: function() {
