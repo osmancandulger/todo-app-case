@@ -20,6 +20,7 @@
       <tr v-for="(item, index) in sortedList" :key="item.id">
         <td>{{ item.id }}</td>
         <td
+            :title="title"
           class="title"
           contenteditable="true"
           v-on:keydown.enter="updateTask($event, list)"
@@ -80,6 +81,7 @@ export default {
       editTitle: this.editTitle,
       checked: false,
       number: 1,
+      title:"",
 
       currentSort: "completed",
 
@@ -93,14 +95,14 @@ export default {
 
   created() {
     setTimeout(() => {
-      //Get data From Todo
+      //Get data From Todo Endpoint (id,Title,Status)
       fetch("https://jsonplaceholder.typicode.com/todos")
         .then((response) => response.json())
         .then((response) => {
           this.list = response;
         });
 
-      //Get data to access to Asignee Names
+      //Get data to access to Asignee Names (That will be bind with whole list in the methods function)
       fetch("https://jsonplaceholder.typicode.com/users")
         .then((response) => response.json())
         .then((users) => {
@@ -177,6 +179,7 @@ export default {
     //   this.sortedList.splice(index, 1);
     // },
 
+    // Remove <tr> and json form ui and json
     removeChart(index) {
       this.list.splice(index, 1);
       return fetch(`${USER_URL}/${this.list.id}`, {
@@ -184,7 +187,8 @@ export default {
       });
     },
 
-    // Insert Asignee names from /users endpoint to /todo endpoint's response
+    // Insert Asignee names from /users endpoint to /todo endpoint's response but
+    // sometimes Asignee names don't fetched so you need to refresh the  page then it gonna be come.
     bind: function() {
       for (let i = 0; i < this.list.length; i++) {
         for (let j = 0; j < this.userList.length; j++) {
