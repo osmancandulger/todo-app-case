@@ -1,6 +1,7 @@
 # todo-app
 
 #### Title kısmını değiştirmek için content üzerine focus yapmanız yeterli 
+#### Assignee username window.onload olmasına rağmen bazen render olmuyor fakat refresh yapınca düzeliyor :( .
 
 ![Screen Recording 2021-03-13 at 04 38 56](https://user-images.githubusercontent.com/59533680/111014797-86930280-83b6-11eb-993f-400b585cd465.gif)
 
